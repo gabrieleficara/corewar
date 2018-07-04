@@ -16,24 +16,30 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = asm
 
-all : library $(NAME)
+all : $(NAME)
 
-$(NAME): $(OBJ)
-	gcc -o $@ $(OBJ) $(LIB)
+$(NAME): library $(OBJ) Makefile
+	@make -C vm
+	@cp vm/corewar vm/..
+	@gcc -o $@ $(OBJ) $(LIB)
 
 library :
-	make -C libft
+	@make -C libft
 
 $(OBJ_PATH)/%.o: src/%.c
 	@mkdir -p $(OBJ_PATH)
 	@gcc -c $< $(FLAGS) -o $@ $(INCLUDES)
 
 clean :
-	make clean -C libft
-	rm -fr obj
+	@make clean -C libft
+	@make clean -C vm
+	@rm -fr obj
+	@echo "removing objects"
 
 fclean : clean
-	make fclean -C libft
-	rm -f $(NAME)
+	@make fclean -C libft
+	@make fclean -C vm
+	@rm -f $(NAME) corewar
+	@echo "removing libraries and programs"
 
 re : fclean all
