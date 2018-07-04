@@ -24,7 +24,7 @@ int		toint(t_vm *vm, int i, int size)
 	size = size + i - 1;
 	while (size >= i)
 	{
-		total += vm->map[size] * multiplicateur;
+		total += vm->map[size % MEM_SIZE] * multiplicateur;
 		multiplicateur *= 256;
 		size--;
 		k++;
